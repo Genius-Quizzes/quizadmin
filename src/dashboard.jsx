@@ -31,7 +31,7 @@ const Dashboard = () => {
   return (
     <div className="content-area">
       <h2>Welcome to Genius Quizzes Admin Panel</h2>
-      <p>Total Number of Users (Emails): {totalUsers}</p>
+      <p>Total Number of App Users (Emails): {totalUsers}</p>
     </div>
   );
 };

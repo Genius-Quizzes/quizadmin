@@ -25,8 +25,8 @@ body {
 
 .admin-title {
   font-size: 30px;
-  font-weight: 500;
-  color: rgb(255, 255, 255);
+  font-weight: 600;
+  color: rgb(0, 0, 0);
   text-align: center;
   margin-bottom: 30px;
   transition: transform 0.6s ease, color 0.3s ease-in-out;
@@ -85,18 +85,18 @@ body {
   border-radius: 64px;
   padding: 10px 20px;
   width: 70%;
-  height: 30px; /* Increased height for better visibility */
+  height: 30px; 
   margin-right: 20px; 
 }
 
 .search-bar input {
-  border: none;  /* Ensure no border */
-  background: transparent;  /* Transparent background */
+  border: none;  
+  background: transparent;  
   flex: 1;
   font-size: 16px;
   padding: 8px 12px;
-  height: 100%;  /* Fill the height of the parent container */
-  outline: none;  /* Remove any outline on focus */
+  height: 100%;  
+  outline: none;  
 }
 
 .search-bar input:focus {

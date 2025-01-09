@@ -91,9 +91,8 @@ const UserManage = () => {
               <th>Email</th>
               <th>Name</th>
               <th>Address</th>
-              <th>Phone</th>
-              
-              <th>Questionbank</th>
+              <th>Phone Number</th>
+              <th>Questionbank Details</th>
             </tr>
           </thead>
           <tbody>
