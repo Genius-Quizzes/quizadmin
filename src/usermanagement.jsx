@@ -53,6 +53,7 @@ const UserManage = () => {
               paymentId: questionData.paymentId,
               questionYear: questionData.questionYear,
               timestamp: questionData.timestamp,
+              userEmail: questionData. userEmail,
             };
           });
 
@@ -60,7 +61,10 @@ const UserManage = () => {
           data.push({
             id: userId,
             email: userData.email,
-            courses: courses,
+            name: userData.name,
+            address: userData. address,
+            phone: userData. phone,
+          
             questionbank: questionbank,
           });
         }
@@ -85,7 +89,10 @@ const UserManage = () => {
             <tr>
               <th>User ID</th>
               <th>Email</th>
-              <th>Courses</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Phone</th>
+              
               <th>Questionbank</th>
             </tr>
           </thead>
@@ -95,21 +102,11 @@ const UserManage = () => {
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.email}</td>
-                  <td>
-                    {user.courses && Object.keys(user.courses).length > 0 ? (
-                      Object.entries(user.courses).map(([courseId, course]) => (
-                        <div key={courseId}>
-                          <p><strong>Course ID:</strong> {courseId}</p>
-                          <p><strong>Exam Title:</strong> {course.examTitle}</p>
-                          <p><strong>Other Field:</strong> {course.otherField}</p>
-                          <p><strong>Timestamp:</strong> {formatTimestamp(course.timestamp)}</p>
-                          <hr />
-                        </div>
-                      ))
-                    ) : (
-                      'No courses available'
-                    )}
-                  </td>
+                  <td>{user.name}</td>
+                  <td>{user.address}</td>
+                  <td>{user.phone}</td>
+                  
+                 
                   <td>
                     {user.questionbank && Object.keys(user.questionbank).length > 0 ? (
                       Object.entries(user.questionbank).map(([questionId, question]) => (
@@ -119,6 +116,8 @@ const UserManage = () => {
                           <p><strong>Exam Title:</strong> {question.examTitle}</p>
                           <p><strong>Payment ID:</strong> {question.paymentId}</p>
                           <p><strong>Question Year:</strong> {question.questionYear}</p>
+                          <p><strong>email:</strong> {question.userEmail}</p>
+                         
                           <p><strong>Timestamp:</strong> {formatTimestamp(question.timestamp)}</p>
                           <hr />
                         </div>
