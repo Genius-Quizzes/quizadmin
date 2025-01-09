@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column; 
+}
+
+.macbook-pro {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh; 
+  overflow: auto; 
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #007ea7;
+  background-image: linear-gradient(315deg, #007ea7 0%, #80ced7 74%);
+  border-radius: 0px 25px 11px 0px; 
+  padding: 20px;
+}
+
+.admin-title {
+  font-size: 30px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  margin-bottom: 30px;
+  transition: transform 0.6s ease, color 0.3s ease-in-out;
+}
+
+.admin-title:hover {
+  transform: scale(1.1);
+  color: #007bff;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.menu-item:hover {
+  background: #007bff;
+  color:#efefef;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 11px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; 
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(315deg, #ccf2ff 0%, #e2e2e2 74%);
+  border-radius: 64px;
+  padding: 10px 20px;
+  width: 70%;
+  height: 30px; /* Increased height for better visibility */
+  margin-right: 20px; 
+}
+
+.search-bar input {
+  border: none;  /* Ensure no border */
+  background: transparent;  /* Transparent background */
+  flex: 1;
+  font-size: 16px;
+  padding: 8px 12px;
+  height: 100%;  /* Fill the height of the parent container */
+  outline: none;  /* Remove any outline on focus */
+}
+
+.search-bar input:focus {
+  outline: none;  /* Ensure no outline appears when the input is focused */
+}
+
+.search-bar p {
+  color: #0000006f;
+  padding-left: 10px;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.user-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; 
+}
+
+.logout,
+.admin-button {
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  height: 45px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 0 20px; 
+}
+
+.logout:hover {
+  background: #007bff;
+  color: #efefef;
+}
+
+.admin-button:hover {
+  background: #007bff;
+  color: #efefef;
+}

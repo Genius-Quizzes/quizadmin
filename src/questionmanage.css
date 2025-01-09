@@ -1,0 +1,119 @@
+/* General Styling for the Question Management Page */
+.question-management-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  font-family: 'Arial', sans-serif;
+  width: auto; /* Container width is auto so it adjusts according to the table width */
+  min-width: 100%; /* Ensures it takes at least 100% width of the parent */
+  box-sizing: border-box; /* Ensure padding and border are included in width */
+  overflow-x: auto; /* Allow horizontal scrolling if the table overflows */
+  margin: 0 auto; /* Center the container */
+}
+
+/* Section Title */
+.section-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Button Group Styling */
+.exams-button-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.exams-button {
+  background-color: #ffffff;
+  border: 1px solid #007bff;
+  color: #007bff;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  text-align: center;
+}
+
+.exams-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.exams-button:focus {
+  outline: none;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.845);
+}
+
+/* Table Styling */
+.exam-question-table {
+  width: 100%; /* Table takes full width */
+  border-collapse: collapse;
+  margin-top: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.exam-question-table th,
+.exam-question-table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 14px;
+}
+
+.exam-question-table th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.exam-question-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.exam-question-table tr:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.exam-question-table td {
+  vertical-align: middle;
+}
+
+/* Button and Table Responsiveness */
+@media (max-width: 768px) {
+  .exams-button-group {
+    grid-template-columns: 1fr 1fr; /* Two columns for smaller screens */
+  }
+
+  .exam-question-table {
+    font-size: 12px; /* Smaller font size for smaller screens */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+  }
+
+  .exam-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .exam-question-table th,
+  .exam-question-table td {
+    padding: 10px;
+  }
+
+  /* Add responsiveness to input fields in the edit form */
+  .edit-form input {
+    width: 100%;
+  }
+
+  .edit-form button {
+    width: 100%;
+  }
+}
