@@ -17,7 +17,7 @@ const QuestionManagement = () => {
     courseId: '',
     examName: '',
     paymentOption: '',
-    title: '',
+   
     yearOfExam: ''
   }); // State for edited data
 
@@ -48,7 +48,7 @@ const QuestionManagement = () => {
         examName: data.examName,
         explanation: data.explanation,
         paymentOption: data.paymentOption,
-        title: data.title,
+      
         yearOfExam: data.yearOfExam,
       });
     });
@@ -91,7 +91,7 @@ const QuestionManagement = () => {
       courseId: question.courseId,
       examName: question.examName,
       paymentOption: question.paymentOption,
-      title: question.title,
+     
       yearOfExam: question.yearOfExam
     });
   };
@@ -129,7 +129,7 @@ const QuestionManagement = () => {
       courseId: editedData.courseId,
       examName: editedData.examName,
       paymentOption: editedData.paymentOption,
-      title: editedData.title,
+    
       yearOfExam: editedData.yearOfExam,
     });
 
@@ -246,13 +246,7 @@ const QuestionManagement = () => {
             onChange={handleInputChange}
             placeholder="Payment Option"
           />
-          <input
-            type="text"
-            name="title"
-            value={editedData.title}
-            onChange={handleInputChange}
-            placeholder="Title"
-          />
+          
           <input
             type="text"
             name="yearOfExam"
@@ -279,7 +273,7 @@ const QuestionManagement = () => {
             <th>Course ID</th>
             <th>Exam Name</th>
             <th>Payment Option</th>
-            <th>Title</th>
+           
             <th>Year of Exam</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -299,7 +293,7 @@ const QuestionManagement = () => {
               <td>{question.courseId}</td>
               <td>{question.examName}</td>
               <td>{question.paymentOption}</td>
-              <td>{question.title}</td>
+            
               <td>{question.yearOfExam}</td>
               <td>
                 <button onClick={() => handleEdit(question)}>Edit</button>

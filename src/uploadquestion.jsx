@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { db } from './firebase'; // Correct Firebase import
 import { collection, addDoc, doc, updateDoc } from 'firebase/firestore'; // Firestore imports
 import './uploadquestion.css';
+import * as XLSX from 'xlsx'; // Importing xlsx
 
 const UploadPage = () => {
   const [question, setQuestion] = useState('');
@@ -9,24 +10,23 @@ const UploadPage = () => {
   const [optionB, setOptionB] = useState('');
   const [optionC, setOptionC] = useState('');
   const [optionD, setOptionD] = useState('');
-  const [correctAnswer, setCorrectAnswer] = useState('A'); // Default to 'A'
+  const [correctAnswer, setCorrectAnswer] = useState('A');
   const [explanation, setExplanation] = useState('');
-  const [courseAmount, setCourseAmount] = useState(0); // New state for course amount
-  const [paymentOption, setPaymentOption] = useState('Free'); // Payment option (Free or Paid)
-  const [title, setTitle] = useState(''); // New state for title
-  const [yearOfExam, setYearOfExam] = useState(''); // New state for year of exam
-  const [examName, setExamName] = useState(''); // New state for exam name
+  const [courseAmount, setCourseAmount] = useState(0);
+  const [paymentOption, setPaymentOption] = useState('Free');
+  const [yearOfExam, setYearOfExam] = useState('');
+  const [examName, setExamName] = useState('');
+  const [xlsxFile, setXlsxFile] = useState(null); // state to hold the file
 
+  // Handle individual form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const questionsRef = collection(db, 'courses');
-
-      // Ensure courseAmount is stored as a number (parseFloat or parseInt depending on the expected format)
       const courseAmountNumber = parseFloat(courseAmount);
 
-      // Add the question to Firebase
+      // Add question data to Firebase
       const docRef = await addDoc(questionsRef, {
         question,
         options: {
@@ -37,40 +37,109 @@ const UploadPage = () => {
         },
         correctAnswer,
         explanation,
-        courseAmount: courseAmount.toString(),  // Store as a number
+        courseAmount: courseAmount.toString(),
         paymentOption,
-        title,
         yearOfExam,
         examName,
       });
 
-      // Get the auto-generated courseId (document ID)
       const courseId = docRef.id;
-
-      // Update the document with the generated courseId using updateDoc
       const courseRef = doc(db, 'courses', courseId);
-      await updateDoc(courseRef, {
-        courseId,
-      });
+      await updateDoc(courseRef, { courseId });
 
       alert('Question added successfully!');
-
-      // Reset form fields
-      setQuestion('');
-      setOptionA('');
-      setOptionB('');
-      setOptionC('');
-      setOptionD('');
-      setCorrectAnswer('A');
-      setExplanation('');
-      setCourseAmount(0);
-      setPaymentOption('Free');
-      setTitle('');
-      setYearOfExam('');
-      setExamName('');
+      resetForm();
     } catch (err) {
       console.error('Error adding document: ', err.message);
       alert(`Failed to add question: ${err.message}`);
+    }
+  };
+
+  // Function to reset the form fields
+  const resetForm = () => {
+    setQuestion('');
+    setOptionA('');
+    setOptionB('');
+    setOptionC('');
+    setOptionD('');
+    setCorrectAnswer('A');
+    setExplanation('');
+    setCourseAmount(0);
+    setPaymentOption('Free');
+    setYearOfExam('');
+    setExamName('');
+  };
+
+  // Handle XLSX file selection and parse it
+  const handleXlsxFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.name.endsWith('.xlsx')) {
+      setXlsxFile(file);
+      parseXlsxFile(file);
+    } else {
+      alert('Please upload a valid .xlsx file');
+    }
+  };
+
+  // Parse XLSX file and upload questions to Firestore
+  const parseXlsxFile = async (file) => {
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const data = new Uint8Array(event.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];  // Get the first sheet name
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+      console.log('Parsed XLSX data:', jsonData); // Log the parsed data for debugging
+
+      // Upload each question from the parsed JSON data
+      for (const questionData of jsonData) {
+        await uploadQuestionFromXlsx(questionData);
+      }
+
+      alert('Questions uploaded successfully!');
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  // Function to upload a question from the parsed xlsx data
+  const uploadQuestionFromXlsx = async (questionData) => {
+    try {
+      // Ensure all required fields are present
+      if (!questionData.question || !questionData.optionA || !questionData.optionB || !questionData.optionC || !questionData.optionD || !questionData.correctAnswer || !questionData.explanation) {
+        console.error('Missing required data:', questionData);
+        return; // Skip this entry if data is missing
+      }
+
+      const questionsRef = collection(db, 'courses');
+      const courseAmountNumber = parseFloat(questionData.courseAmount) || 0;
+
+      // Prepare the data to be uploaded
+      const docRef = await addDoc(questionsRef, {
+        question: questionData.question,
+        options: {
+          A: questionData.optionA,
+          B: questionData.optionB,
+          C: questionData.optionC,
+          D: questionData.optionD,
+        },
+        correctAnswer: questionData.correctAnswer,
+        explanation: questionData.explanation,
+        courseAmount: courseAmountNumber.toString(),
+        paymentOption: questionData.paymentOption || 'Free', // Default to 'Free' if not present
+        yearOfExam: questionData.yearOfExam || '', // Handle missing year
+        examName: questionData.examName || '', // Handle missing exam name
+      });
+
+      // After creating the document, update it with the courseId
+      const courseId = docRef.id;
+      const courseRef = doc(db, 'courses', courseId);
+      await updateDoc(courseRef, { courseId });
+
+      console.log(`Successfully uploaded question: ${questionData.question}`);
+    } catch (err) {
+      console.error('Error uploading question from XLSX:', err.message, err);
     }
   };
 
@@ -78,17 +147,19 @@ const UploadPage = () => {
     <div className="upload-page">
       <h2 className="upload-page-title">Upload Page</h2>
       <form className="upload-form" onSubmit={handleSubmit}>
+        {/* Course Amount */}
         <div className="form-group">
           <label className="form-label">Course Amount:</label>
           <input
             className="form-input"
             type="number"
             value={courseAmount}
-            onChange={(e) => setCourseAmount(e.target.value)} // Ensure value is being captured as a number
+            onChange={(e) => setCourseAmount(e.target.value)}
             required
           />
         </div>
 
+        {/* Payment Option */}
         <div className="form-group">
           <label className="form-label">Payment Option:</label>
           <select
@@ -102,17 +173,7 @@ const UploadPage = () => {
           </select>
         </div>
 
-        <div className="form-group">
-          <label className="form-label">Title:</label>
-          <input
-            className="form-input"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-
+        {/* Year of Exam */}
         <div className="form-group">
           <label className="form-label">Year of Exam:</label>
           <input
@@ -124,6 +185,7 @@ const UploadPage = () => {
           />
         </div>
 
+        {/* Exam Name */}
         <div className="form-group">
           <label className="form-label">Exam Name:</label>
           <input
@@ -135,6 +197,7 @@ const UploadPage = () => {
           />
         </div>
 
+        {/* Question */}
         <div className="form-group">
           <label className="form-label">Question:</label>
           <textarea
@@ -145,6 +208,7 @@ const UploadPage = () => {
           />
         </div>
 
+        {/* Options A, B, C, D */}
         <div className="options-grid">
           <div className="form-group">
             <label className="form-label">A:</label>
@@ -191,6 +255,7 @@ const UploadPage = () => {
           </div>
         </div>
 
+        {/* Correct Answer */}
         <div className="form-group">
           <label className="form-label">Correct Answer:</label>
           <select
@@ -206,6 +271,7 @@ const UploadPage = () => {
           </select>
         </div>
 
+        {/* Explanation */}
         <div className="form-group">
           <label className="form-label">Explanation:</label>
           <textarea
@@ -216,6 +282,17 @@ const UploadPage = () => {
           />
         </div>
 
+        {/* XLSX File Upload */}
+        <div className="form-group">
+          <label className="form-label">Choose XLSX File:</label>
+          <input
+            type="file"
+            className="form-input"
+            onChange={handleXlsxFileChange} // Handle file change
+          />
+        </div>
+
+        {/* Submit Button for Manual Form */}
         <button className="submit-button" type="submit">Submit</button>
       </form>
     </div>

@@ -9,7 +9,7 @@ import UploadQuestion from './uploadquestion';
 import UserManage from './usermanagement';
 
 // Firebase imports
-import { db } from './firebase'; // Assuming this is where your Firebase setup is
+import { db } from './firebase'; 
 import { collection, getDocs } from 'firebase/firestore';
 
 const App = () => {
